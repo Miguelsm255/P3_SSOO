@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define N_COCHES 8
 
@@ -21,7 +22,7 @@ void *funcion_coche(coche_t *pcoche)
     int aleatorio;
     unsigned int semilla = (pcoche->id) + pthread_self(); // semilla generacion num. aleatorios
 
-    printf("Salida de %s %d\n", pcoche->cadena, pcoche->id);
+    printf("Salida de %s %d\n", pcoche->cadena, pcoche->id+1);
     
     fflush (stdout);
 
@@ -30,12 +31,13 @@ void *funcion_coche(coche_t *pcoche)
 
     sleep(aleatorio);
  
-    printf("Llegada de %s %d\n", pcoche->cadena, pcoche->id);
+    printf("Llegada de %s %d\n", pcoche->cadena, pcoche->id+1);
 
     /* CODIGO 4 */
 
 
     /* CODIGO 2 */    
+    pthread_exit(NULL);
 }
 
 
@@ -51,9 +53,17 @@ int main(void)
     {
         
         /* CODIGO 1 */
-        
-    }
 
+        // Inicializamos los datos del coche
+        Coches[i].id = i;
+        Coches[i].cadena = "Coche";
+
+        // Creamos el hilo del coche
+        if (pthread_create(&hilosCoches[i], NULL, (void *(*)(void *))funcion_coche, (void *)&Coches[i]) != 0) {
+            perror("Error creando hilo");
+            exit(EXIT_FAILURE);
+        }
+    }
     printf("Proceso de creacion de hilos terminado\n\n");
      
     
@@ -61,7 +71,12 @@ int main(void)
     {
         
         /* CODIGO 3 */
-        
+
+        // Esperamos a que termine el hilo del coche
+        if (pthread_join(hilosCoches[i], NULL) != 0) {
+            perror("Error esperando hilo");
+            exit(EXIT_FAILURE);
+        }
     }
    
     printf("Todos los coches han LLEGADO A LA META \n");
@@ -70,5 +85,3 @@ int main(void)
 
     return 0;
 }
-
-
