@@ -14,7 +14,8 @@ typedef struct {
 extern coche_t Coches[N_COCHES];
 extern volatile int clasificacionFinal[N_COCHES];
 extern volatile int finalCarrera;
-extern pthread_mutex_t mutex;
+extern pthread_mutex_t mutexDatos;
+extern pthread_mutex_t mutexInicio;
 
 void *funcion_coche(coche_t *pcoche);
 
