@@ -18,7 +18,7 @@ bin: #Crea la carpeta bin
 	mkdir -p bin
 
 bin/simula_car: bin build build/funcion_coche.o build/simula_car.o
-	$(CC) $(CFLAGS) -o bin/simula_car build/funcion_coche.o build/simula_car.o
+	$(CC) $(CFLAGS) -o bin/simula_car build/funcion_coche.o build/simula_car.o -lpthread
 
 build/funcion_coche.o: $(RUTA_C)/funcion_coche.c
 	$(CC) $(CFLAGS) -c $(RUTA_C)/funcion_coche.c -o build/funcion_coche.o
