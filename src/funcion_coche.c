@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include "../include/simula_car.h"
 
-void *funcion_coche(coche_t *pcoche) {
-
+void *funcion_coche(coche_t *pcoche)
+{
     // Bloqueamos el mutex para que los hilos no empiecen hasta que se hayan creado todos
     if (pthread_mutex_lock(&mutexInicio) != 0) {
         perror("Error bloqueando mutex");
@@ -28,6 +28,7 @@ void *funcion_coche(coche_t *pcoche) {
 
     printf("Llegada de %s %d\n", pcoche->cadena, pcoche->id + 1);
 
+    /* CODIGO 4 */
     // Bloqueamos el mutex para que solo este hilo pueda escribir en la clasificación final
     if (pthread_mutex_lock(&mutexDatos) != 0) {
         perror("Error bloqueando mutex");
@@ -43,5 +44,6 @@ void *funcion_coche(coche_t *pcoche) {
         exit(EXIT_FAILURE);
     }
 
+    /* CODIGO 2 */
     pthread_exit(NULL);
 }

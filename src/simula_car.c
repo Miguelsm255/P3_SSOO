@@ -40,9 +40,7 @@ int main(void)
 
     for (i=0; i<N_COCHES; i++)
     {
-        
         /* CODIGO 1 */
-
         // Inicializamos los datos del coche
         Coches[i].id = i;
         Coches[i].cadena = "Coche";
@@ -63,12 +61,9 @@ int main(void)
     printf("Proceso de creacion de hilos terminado\n\n");
     printf("SALIDA DE COCHES\n");
      
-    
     for (i=0; i<N_COCHES; i++)
     {
-        
         /* CODIGO 3 */
-
         // Esperamos a que termine el hilo del coche
         if (pthread_join(hilosCoches[i], NULL) != 0) {
             perror("Error esperando hilo");
@@ -83,7 +78,6 @@ int main(void)
     pthread_mutex_destroy(&mutexInicio);
     
     /* CODIGO 5 */        
-
     printf("CLASIFICACION FINAL:\n");
     for (i=0; i<N_COCHES; i++)
     {
