@@ -15,6 +15,10 @@ typedef struct {
 // Array de datos de tipo coche_t
 coche_t Coches[N_COCHES];
 
+volatile int clasificacionFinal[N_COCHES];
+volatile int finalCarrera = 0;
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // Funcion ejecutada por los hilos
 void *funcion_coche(coche_t *pcoche)
@@ -35,6 +39,21 @@ void *funcion_coche(coche_t *pcoche)
 
     /* CODIGO 4 */
 
+    // Bloqueo el mutex
+    if (pthread_mutex_lock(&mutex) != 0) {
+        perror("Error bloqueando mutex");
+        exit(EXIT_FAILURE);
+    }
+
+    // Guardamos la clasificacion del coche
+    clasificacionFinal[finalCarrera] = pcoche->id;
+    finalCarrera++;
+
+    // Desbloqueo el mutex
+    if (pthread_mutex_unlock(&mutex) != 0) {
+        perror("Error desbloqueando mutex");
+        exit(EXIT_FAILURE);
+    }
 
     /* CODIGO 2 */    
     pthread_exit(NULL);
@@ -43,6 +62,12 @@ void *funcion_coche(coche_t *pcoche)
 
 int main(void)
 {
+    // Inicializar el mutex
+    if (pthread_mutex_init(&mutex, NULL) != 0) {
+        perror("Error inicializando mutex");
+        exit(EXIT_FAILURE);
+    }
+
     pthread_t hilosCoches[N_COCHES]; // tabla con los identificadores de los hilos
     int i;
     
@@ -80,8 +105,17 @@ int main(void)
     }
    
     printf("Todos los coches han LLEGADO A LA META \n");
+
+    //Destruyo el mutex
+    pthread_mutex_destroy(&mutex);
     
     /* CODIGO 5 */        
+
+    printf("CLASIFICACION FINAL:\n");
+    for (i=0; i<N_COCHES; i++)
+    {
+        printf( "%dº: Coche %d\n", i+1, clasificacionFinal[i]+1);
+    }    
 
     return 0;
 }
