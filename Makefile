@@ -9,7 +9,7 @@ all: bin/simula_car
 .PHONY: clean 
 clean: #Borra el ejecutable y los archivos objeto
 	rm -rf bin/* build/*
-	rmdir bin build
+	rm -rf bin build
 
 build: #Crea la carpeta build
 	mkdir -p build 
